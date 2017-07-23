@@ -5,6 +5,7 @@
 * MapKit
 * UIKit
 * UIView Animation
+* UISearchController
 
 ### Features
 * User can get directions by entering their current location and their desired destination.
