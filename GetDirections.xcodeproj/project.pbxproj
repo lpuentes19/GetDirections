@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		956F49901F29220D0086C7CB /* LocationSearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956F498F1F29220D0086C7CB /* LocationSearchTableViewController.swift */; };
+		956F49921F295EFC0086C7CB /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956F49911F295EFC0086C7CB /* LaunchScreenViewController.swift */; };
 		95EF53B21F2179C60077B3AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95EF53B11F2179C60077B3AA /* AppDelegate.swift */; };
 		95EF53B71F2179C60077B3AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 95EF53B51F2179C60077B3AA /* Main.storyboard */; };
 		95EF53B91F2179C60077B3AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 95EF53B81F2179C60077B3AA /* Assets.xcassets */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		956F498F1F29220D0086C7CB /* LocationSearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationSearchTableViewController.swift; sourceTree = "<group>"; };
+		956F49911F295EFC0086C7CB /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		95EF53AE1F2179C60077B3AA /* GetDirections.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetDirections.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95EF53B11F2179C60077B3AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		95EF53B61F2179C60077B3AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				95EF53B51F2179C60077B3AA /* Main.storyboard */,
+				956F49911F295EFC0086C7CB /* LaunchScreenViewController.swift */,
 				95EF53C41F22A37F0077B3AA /* DirectionsViewController.swift */,
 				956F498F1F29220D0086C7CB /* LocationSearchTableViewController.swift */,
 				95EF53C31F2179D70077B3AA /* Resources */,
@@ -150,6 +153,7 @@
 			files = (
 				95EF53C51F22A37F0077B3AA /* DirectionsViewController.swift in Sources */,
 				956F49901F29220D0086C7CB /* LocationSearchTableViewController.swift in Sources */,
+				956F49921F295EFC0086C7CB /* LaunchScreenViewController.swift in Sources */,
 				95EF53B21F2179C60077B3AA /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
