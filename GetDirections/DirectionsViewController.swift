@@ -14,7 +14,7 @@ protocol HandleMapSearch {
 }
 
 
-class DirectionsViewController: UIViewController {
+class DirectionsViewController: UIViewController, MKMapViewDelegate {
 
     let locationManager = CLLocationManager()
     var resultSearchController: UISearchController? = nil
@@ -47,11 +47,39 @@ class DirectionsViewController: UIViewController {
         locationSearchTable.mapView = mapView
         locationSearchTable.handleMapSearchDelegate = self
     }
+    
+    // This is a MKMapViewDelegate method that customizes the appearance of map pins and callouts.
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?{
+        if annotation is MKUserLocation {
+            // return nil so map view draws "blue dot" for standard user location
+            return nil
+        }
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+        pinView?.pinTintColor = UIColor.red
+        pinView?.canShowCallout = true
+        let smallSquare = CGSize(width: 30, height: 30)
+        let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: smallSquare))
+        button.setBackgroundImage(UIImage(named: "car"), for: .normal)
+        button.addTarget(self, action: #selector(getDirections), for: .touchUpInside)
+        pinView?.leftCalloutAccessoryView = button
+        return pinView
+    }
+    
+    // This is an API call that launches the Apple Maps app with driving directions. Converted the cached selectedPin to a MKMapItem
+    func getDirections(){
+        if let selectedPin = selectedPin {
+            let mapItem = MKMapItem(placemark: selectedPin)
+            let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
+            mapItem.openInMaps(launchOptions: launchOptions)
+        }
+    }
 
     @IBOutlet weak var mapView: MKMapView!
 }
 
-extension DirectionsViewController: CLLocationManagerDelegate, MKMapViewDelegate {
+extension DirectionsViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
             locationManager.requestLocation()
@@ -85,7 +113,7 @@ extension DirectionsViewController: HandleMapSearch {
         
         if let city = placemark.locality,
             let state = placemark.administrativeArea {
-            annotation.subtitle = "(city) (state)"
+            annotation.subtitle = "\(city) \(state)"
         }
         
         mapView.addAnnotation(annotation)
