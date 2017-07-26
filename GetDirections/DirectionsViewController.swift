@@ -9,10 +9,16 @@
 import UIKit
 import MapKit
 
+protocol HandleMapSearch {
+    func dropPinZoomIn(placemark:MKPlacemark)
+}
+
+
 class DirectionsViewController: UIViewController {
 
     let locationManager = CLLocationManager()
     var resultSearchController: UISearchController? = nil
+    var selectedPin:MKPlacemark? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,58 +45,9 @@ class DirectionsViewController: UIViewController {
         definesPresentationContext = true
         
         locationSearchTable.mapView = mapView
+        locationSearchTable.handleMapSearchDelegate = self
     }
-    
-//        mapView.showsScale = true
-//        mapView.showsPointsOfInterest = true
-//        mapView.showsUserLocation = true
-//        
-//        locationManager.requestAlwaysAuthorization()
-//        locationManager.requestWhenInUseAuthorization()
-//        
-//        if CLLocationManager.locationServicesEnabled() {
-//            locationManager.delegate = self
-//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//            locationManager.startUpdatingLocation()
-//        }
-//        
-//        guard let sourceCoordinates = locationManager.location?.coordinate else { return }
-//        let destCoordinates = CLLocationCoordinate2DMake(39.7439, 105.0201)
-//        
-//        let sourcePlacemark = MKPlacemark(coordinate: sourceCoordinates)
-//        let destPlacemark = MKPlacemark(coordinate: destCoordinates)
-//        
-//        let sourceItem = MKMapItem(placemark: sourcePlacemark)
-//        let destItem = MKMapItem(placemark: destPlacemark)
-//        
-//        let directionRequest = MKDirectionsRequest()
-//        directionRequest.source = sourceItem
-//        directionRequest.destination = destItem
-//        directionRequest.transportType = .any
-//        
-//        let directions = MKDirections(request: directionRequest)
-//        directions.calculate { (response, error) in
-//            guard let response = response else {
-//                if let error = error {
-//                    print("Something went wrong: \(error)")
-//                }
-//                return
-//            }
-//            
-//            let route = response.routes[0]
-//            self.mapView.add(route.polyline, level: .aboveRoads)
-//            
-//            let rekt = route.polyline.boundingMapRect
-//            self.mapView.setRegion(MKCoordinateRegionForMapRect(rekt), animated: true)
-//        }
-    
-//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-//        let renderer = MKPolylineRenderer(overlay: overlay)
-//        renderer.strokeColor = .blue
-//        renderer.lineWidth = 5.0
-//        
-//        return renderer
-//    }
+
     @IBOutlet weak var mapView: MKMapView!
 }
 
@@ -113,5 +70,27 @@ extension DirectionsViewController: CLLocationManagerDelegate, MKMapViewDelegate
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("error: \(error)")
+    }
+}
+
+extension DirectionsViewController: HandleMapSearch {
+    func dropPinZoomIn(placemark:MKPlacemark){
+        // cache the pin
+        selectedPin = placemark
+        // clear existing pins
+        mapView.removeAnnotations(mapView.annotations)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = placemark.coordinate
+        annotation.title = placemark.name
+        
+        if let city = placemark.locality,
+            let state = placemark.administrativeArea {
+            annotation.subtitle = "(city) (state)"
+        }
+        
+        mapView.addAnnotation(annotation)
+        let span = MKCoordinateSpanMake(0.05, 0.05)
+        let region = MKCoordinateRegionMake(placemark.coordinate, span)
+        mapView.setRegion(region, animated: true)
     }
 }
